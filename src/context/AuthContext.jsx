@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from 'react';
 import { loginUser, registerUser, getCurrentUser } from '../api/authApi';
 
@@ -14,7 +15,7 @@ export const AuthProvider = ({ children }) => {
         try {
           const userData = await getCurrentUser();
           setUser(userData);
-        } catch (error) {
+        } catch {
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           setUser(null);
@@ -61,5 +62,3 @@ export const useAuth = () => {
   }
   return context;
 };
-
-export default AuthContext;
