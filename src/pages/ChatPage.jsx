@@ -87,43 +87,43 @@ const ChatPage = () => {
     <div className="grid h-[calc(100vh-8rem)] grid-cols-[320px_1fr] gap-4 overflow-hidden">
 
       {/* ── ASIDE ── */}
-      <aside className="flex min-h-0 flex-col gap-3 overflow-hidden">
+      {/* Removed scroll-related classes and optimized gap */}
+      <aside className="flex flex-col gap-3 overflow-hidden">
 
-        {/* Info card */}
-        <div className="shrink-0 rounded-[1.75rem] border border-white/10 bg-slate-900/85 p-5 shadow-lg shadow-black/10">
+        {/* Info card - tightened padding and text */}
+        <div className="shrink-0 rounded-[1.75rem] border border-white/10 bg-slate-900/85 p-4 shadow-lg shadow-black/10">
           <p className="text-[10px] uppercase tracking-[0.3em] text-slate-500">Assistant</p>
-          <h2 className="mt-2 text-xl font-semibold text-white">AI chat</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-400">
+          <h2 className="mt-1.5 text-lg font-semibold text-white">AI chat</h2>
+          <p className="mt-1.5 text-xs leading-5 text-slate-400">
             Ask about spending, budgets, and patterns. You will get contextual answers from your transactions and budget activity.
           </p>
         </div>
 
-        {/* Quick prompts — flex + min-h-0 so it compresses and never overflows */}
-        <div className="flex min-h-0 flex-col rounded-[1.75rem] border border-white/10 bg-white/5 p-5">
+        {/* Quick prompts - tightened padding to fit on screen */}
+        <div className="flex flex-col rounded-[1.75rem] border border-white/10 bg-white/5 p-4">
           <p className="shrink-0 text-[10px] uppercase tracking-[0.3em] text-slate-500">Quick prompts</p>
 
-          {/* Inner list scrolls if needed, never leaks outside the card */}
-          <div className="mt-3 flex min-h-0 flex-col gap-2 overflow-y-auto pr-1 [scrollbar-width:thin]">
+          <div className="mt-2.5 flex flex-col gap-2">
             {quickPrompts.map((prompt) => (
               <button
                 key={prompt}
                 type="button"
                 onClick={() => handlePromptClick(prompt)}
-                className="group flex w-full shrink-0 items-start gap-2 rounded-2xl border border-white/10 bg-slate-900/70 px-4 py-3 text-left text-sm text-slate-300 transition hover:border-violet-400/40 hover:bg-white/10 hover:text-white"
+                className="group flex w-full shrink-0 items-start gap-2 rounded-2xl border border-white/10 bg-slate-900/70 px-4 py-2.5 text-left text-sm text-slate-300 transition hover:border-violet-400/40 hover:bg-white/10 hover:text-white"
               >
-                <span className="mt-1.5 inline-block h-2 w-2 shrink-0 rounded-full bg-violet-400/80 transition group-hover:bg-violet-300" />
-                {prompt}
+                <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-violet-400/80 transition group-hover:bg-violet-300" />
+                <span className="leading-snug">{prompt}</span>
               </button>
             ))}
           </div>
         </div>
 
-        {/* Clear button — shrink-0 so it's always fully visible */}
-        <div className="shrink-0 rounded-[1.75rem] border border-white/10 bg-slate-900/70 p-3">
+        {/* Clear button - Reduced outer padding and used mt-auto to push to bottom */}
+        <div className="mt-auto shrink-0 rounded-[1.75rem] border border-white/10 bg-slate-900/70 p-2">
           <button
             type="button"
             onClick={handleClear}
-            className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-slate-200 transition hover:bg-rose-500/10 hover:text-rose-200"
+            className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-slate-200 transition hover:bg-rose-500/10 hover:text-rose-200"
           >
             Clear conversation
           </button>
