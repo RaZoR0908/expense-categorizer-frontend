@@ -127,13 +127,16 @@ const RegisterPage = () => {
           <div className="relative flex h-full flex-col justify-center rounded-[2rem] border border-white/10 bg-white/[0.03] p-7 shadow-2xl shadow-black/20 backdrop-blur-xl lg:p-8">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.35em] text-slate-300">
+                FinAIlytics
+              </div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.35em] text-slate-300">
                 Smart onboarding
               </div>
               <h1 className="mt-6 max-w-2xl text-3xl font-semibold leading-tight text-white lg:text-5xl">
                 A cleaner financial workflow starts with one login.
               </h1>
               <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 lg:text-base">
-                Once registered, your statements, budgets, and AI chat history stay private and are tied to your account.
+                Once registered, your Bank Statements, budgets, and AI chat history stay private and are tied to your account.
               </p>
             </div>
 

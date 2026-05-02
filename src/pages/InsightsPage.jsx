@@ -119,14 +119,14 @@ const InsightsPage = () => {
           </section>
 
           <section className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-            <div className="rounded-[2rem] border border-white/10 bg-slate-900/85 p-6 shadow-lg shadow-black/10">
+            <div className="rounded-[2rem] border border-white/10 bg-slate-900/85 p-4 shadow-lg shadow-black/10 flex flex-col">
               <h3 className="text-lg font-semibold text-white">Category breakdown</h3>
               <p className="mt-1 text-sm text-slate-400">Current month spending distribution.</p>
-              <div className="mt-6 h-80">
+              <div className="mt-3 flex-1 min-h-96">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.15)" />
-                    <XAxis dataKey="name" tick={{ fill: '#cbd5e1', fontSize: 12 }} angle={-15} textAnchor="end" height={70} />
+                    <XAxis dataKey="name" tick={{ fill: '#cbd5e1', fontSize: 12 }} angle={-15} textAnchor="end" height={60} />
                     <YAxis tick={{ fill: '#cbd5e1', fontSize: 12 }} />
                     <Tooltip
                       contentStyle={{

@@ -5,7 +5,7 @@ import Sidebar from '../components/layout/Sidebar';
 const titleMap = {
   '/dashboard': 'Dashboard',
   '/transactions': 'Transactions',
-  '/upload': 'Upload Statement',
+  '/upload': 'Upload Bank Statement',
   '/budgets': 'Budgets',
   '/insights': 'Insights',
   '/chat': 'AI Chat',
@@ -19,7 +19,7 @@ const AppLayout = () => {
     const matched = Object.entries(titleMap).find(([path]) =>
       location.pathname.startsWith(path)
     );
-    return matched ? matched[1] : 'ExpenseAI';
+    return matched ? matched[1] : 'FinAIlytics';
   }, [location.pathname]);
 
   const closeMobileSidebar = () => setMobileSidebarOpen(false);
@@ -68,7 +68,7 @@ const AppLayout = () => {
               </button>
 
               <div className="min-w-0 flex-1">
-                <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Expense tracker</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-slate-500">FinAIlytics</p>
                 <h1 className="truncate text-2xl font-semibold text-white">{pageTitle}</h1>
               </div>
 
@@ -76,7 +76,7 @@ const AppLayout = () => {
                 to="/upload"
                 className="hidden rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-violet-500/20 transition hover:scale-[1.02] sm:inline-flex"
               >
-                Upload statement
+                Upload Bank Statement
               </Link>
             </div>
           </header>

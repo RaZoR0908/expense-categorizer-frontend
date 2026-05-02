@@ -3,13 +3,31 @@ import toast from 'react-hot-toast';
 import { correctTransaction, getAllTransactions, getTransactionsByCategory, getTransactionsByMonth } from '../api/transactionApi';
 import { CATEGORIES } from '../utils/categories';
 import DropdownSelect from '../components/common/DropdownSelect';
-import { formatCurrency, formatDate } from '../utils/formatters';
+import { formatCurrency, formatDate, formatMonthLabel } from '../utils/formatters';
+
+const MONTH_NAMES = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
 
 const TransactionsPage = () => {
   const [loading, setLoading] = useState(true);
   const [transactions, setTransactions] = useState([]);
   const [filters, setFilters] = useState({ month: '', category: '' });
   const [pendingCorrections, setPendingCorrections] = useState({});
+  const [showPicker, setShowPicker] = useState(false);
+  const [pickerMonth, setPickerMonth] = useState(new Date().getMonth() + 1);
+  const [pickerYear, setPickerYear] = useState(new Date().getFullYear());
 
   const loadTransactions = useCallback(async (currentFilters = filters) => {
     setLoading(true);
@@ -22,6 +40,11 @@ const TransactionsPage = () => {
       } else {
         data = await getAllTransactions();
       }
+
+      if (currentFilters.category && currentFilters.month) {
+        data = (data || []).filter((transaction) => transaction.category === currentFilters.category);
+      }
+
       setTransactions(data || []);
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to load transactions');
@@ -43,15 +66,39 @@ const TransactionsPage = () => {
     setFilters((current) => ({ ...current, [name]: value }));
   };
 
-  const applyFilters = async (event) => {
-    event.preventDefault();
-    await loadTransactions(filters);
+  const handleMonthSelect = () => {
+    const nextMonth = `${String(pickerYear).padStart(4, '0')}-${String(pickerMonth).padStart(2, '0')}`;
+    setFilters((current) => ({ ...current, month: nextMonth }));
+    setShowPicker(false);
+  };
+
+  const handlePrevMonth = () => {
+    if (pickerMonth === 1) {
+      setPickerMonth(12);
+      setPickerYear((y) => y - 1);
+    } else {
+      setPickerMonth((m) => m - 1);
+    }
+  };
+
+  const handleNextMonth = () => {
+    if (pickerMonth === 12) {
+      setPickerMonth(1);
+      setPickerYear((y) => y + 1);
+    } else {
+      setPickerMonth((m) => m + 1);
+    }
   };
 
   const resetFilters = async () => {
     const next = { month: '', category: '' };
     setFilters(next);
     await loadTransactions(next);
+  };
+
+  const applyFilters = async (event) => {
+    event.preventDefault();
+    await loadTransactions(filters);
   };
 
   const handleCorrection = async (transactionId) => {
@@ -75,6 +122,11 @@ const TransactionsPage = () => {
     return { total, count: transactions.length };
   }, [transactions]);
 
+  const pickerYearOptions = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    return Array.from({ length: 7 }, (_, index) => currentYear - 3 + index);
+  }, []);
+
   return (
     <div className="space-y-6">
       <section className="rounded-[2rem] border border-white/10 bg-slate-900/85 p-6 shadow-lg shadow-black/10">
@@ -95,19 +147,22 @@ const TransactionsPage = () => {
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
               <p className="text-xs uppercase tracking-[0.25em] text-slate-500">Filters</p>
-              <p className="mt-2 text-xl font-semibold text-white">{filters.month || filters.category || 'None'}</p>
+              <p className="mt-2 text-xl font-semibold text-white">{filters.month ? formatMonthLabel(filters.month) : filters.category || 'None'}</p>
             </div>
           </div>
         </div>
 
         <form className="mt-6 grid gap-3 md:grid-cols-[1fr_1fr_auto_auto]" onSubmit={applyFilters}>
-          <input
-            type="month"
-            name="month"
-            value={filters.month}
-            onChange={handleFilterChange}
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition focus:border-violet-400"
-          />
+          <button
+            type="button"
+            onClick={() => setShowPicker(!showPicker)}
+            className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-white outline-none transition hover:bg-white/10 focus:border-violet-400"
+          >
+            <span className="truncate">{filters.month ? formatMonthLabel(filters.month) : 'Select month and year'}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="ml-3 h-4 w-4 shrink-0 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 2v4M16 2v4M3 9h18M5 5h14a2 2 0 012 2v11a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
+            </svg>
+          </button>
           <DropdownSelect
             options={CATEGORIES}
             value={filters.category}
@@ -122,6 +177,53 @@ const TransactionsPage = () => {
             Reset
           </button>
         </form>
+
+        {showPicker && (
+          <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 max-w-xs">
+            <div className="flex items-center justify-between gap-2 mb-4">
+              <button type="button" onClick={handlePrevMonth} className="p-1 rounded hover:bg-white/10 text-slate-300">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <select
+                value={pickerYear}
+                onChange={(e) => setPickerYear(Number(e.target.value))}
+                className="rounded border border-white/10 bg-white/5 px-2 py-1 text-sm text-white outline-none"
+              >
+                {pickerYearOptions.map((year) => (
+                  <option key={year} value={year} className="bg-slate-900">
+                    {year}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={pickerMonth}
+                onChange={(e) => setPickerMonth(Number(e.target.value))}
+                className="rounded border border-white/10 bg-white/5 px-2 py-1 text-sm text-white outline-none"
+              >
+                {MONTH_NAMES.map((label, index) => (
+                  <option key={index} value={index + 1} className="bg-slate-900">
+                    {label}
+                  </option>
+                ))}
+              </select>
+              <button type="button" onClick={handleNextMonth} className="p-1 rounded hover:bg-white/10 text-slate-300">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleMonthSelect}
+              className="w-full rounded-lg bg-violet-500 px-3 py-2 text-sm font-medium text-white transition hover:bg-violet-400"
+            >
+              Apply month
+            </button>
+          </div>
+        )}
       </section>
 
       {loading ? (

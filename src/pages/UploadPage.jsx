@@ -28,7 +28,7 @@ const UploadPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!selectedFile) {
-      toast.error('Pick a statement file first');
+      toast.error('Pick a Bank Statement file first');
       return;
     }
 
@@ -36,7 +36,7 @@ const UploadPage = () => {
     try {
       const data = await uploadStatement(selectedFile, password || null);
       setResult(data);
-      toast.success('Statement processed');
+      toast.success('Bank Statement processed');
     } catch (error) {
       toast.error(error.response?.data?.message || 'Upload failed');
     } finally {
@@ -47,8 +47,8 @@ const UploadPage = () => {
   return (
     <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
       <section className="rounded-[2rem] border border-white/10 bg-slate-900/85 p-6 shadow-lg shadow-black/10">
-        <h2 className="text-2xl font-semibold text-white">Upload statement</h2>
-        <p className="mt-2 text-sm text-slate-400">Import PDF, CSV, XLS, or XLSX files for parsing and auto-categorization.</p>
+        <h2 className="text-2xl font-semibold text-white">Upload Bank Statement</h2>
+        <p className="mt-2 text-sm text-slate-400">Upload your Bank Statement file and we will sort it for you.</p>
 
         <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
           <div
@@ -61,10 +61,10 @@ const UploadPage = () => {
           >
             <input {...getInputProps()} />
             <p className="text-lg font-medium text-white">
-              {isDragActive ? 'Drop the file here' : 'Drag and drop a bank statement here'}
+              {isDragActive ? 'Drop the file here' : 'Drag and drop a Bank Statement here'}
             </p>
             <p className="mt-2 text-sm text-slate-400">or click to browse files from your device</p>
-            <p className="mt-4 text-xs uppercase tracking-[0.3em] text-slate-500">Supported: PDF, CSV, XLS, XLSX</p>
+            <p className="mt-4 text-xs uppercase tracking-[0.3em] text-slate-500">Supported file types</p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
@@ -102,11 +102,11 @@ const UploadPage = () => {
 
       <aside className="space-y-4">
         <div className="rounded-[2rem] border border-white/10 bg-slate-900/85 p-6 shadow-lg shadow-black/10">
-          <h3 className="text-lg font-semibold text-white">Processing flow</h3>
+          <h3 className="text-lg font-semibold text-white">What happens next</h3>
           <ol className="mt-4 space-y-3 text-sm text-slate-300">
-            <li>1. Backend detects the file type and extracts rows or text.</li>
-            <li>2. Each transaction is normalized and categorized by the AI service.</li>
-            <li>3. Parsed records are stored under your account in PostgreSQL.</li>
+            <li>1. Detects the file type and extracts rows or text.</li>
+            <li>2. Each item is sorted into the right group.</li>
+            <li>3. Your information is saved to your account.</li>
             <li>4. Dashboard, budgets, and insights update from the saved data.</li>
           </ol>
         </div>
@@ -114,11 +114,10 @@ const UploadPage = () => {
         <div className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-cyan-500/10 to-violet-500/10 p-6">
           <p className="text-sm uppercase tracking-[0.3em] text-cyan-200/80">Result</p>
           <div className="mt-3 space-y-2 text-sm text-slate-200">
-            <p>Transactions processed: {result?.transactionsProcessed ?? '—'}</p>
-            <p>Transactions categorized: {result?.transactionsCategorized ?? '—'}</p>
-            <p>User ID: {result?.userId ?? '—'}</p>
+            <p>Items handled: {result?.transactionsProcessed ?? '—'}</p>
+            <p>Items sorted: {result?.transactionsCategorized ?? '—'}</p>
           </div>
-          <p className="mt-4 text-sm text-slate-400">{result?.message || 'Upload a statement to see the parsed result here.'}</p>
+          <p className="mt-4 text-sm text-slate-400">{result?.message || 'Upload a Bank Statement to see the result here.'}</p>
         </div>
       </aside>
     </div>

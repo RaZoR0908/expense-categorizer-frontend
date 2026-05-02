@@ -1,23 +1,26 @@
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 import AppLayout from './layouts/AppLayout';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import DashboardPage from './pages/DashboardPage';
-import TransactionsPage from './pages/TransactionsPage';
-import UploadPage from './pages/UploadPage';
-import BudgetsPage from './pages/BudgetsPage';
-import InsightsPage from './pages/InsightsPage';
-import ChatPage from './pages/ChatPage';
-import NotFoundPage from './pages/NotFoundPage';
+
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const TransactionsPage = lazy(() => import('./pages/TransactionsPage'));
+const UploadPage = lazy(() => import('./pages/UploadPage'));
+const BudgetsPage = lazy(() => import('./pages/BudgetsPage'));
+const InsightsPage = lazy(() => import('./pages/InsightsPage'));
+const ChatPage = lazy(() => import('./pages/ChatPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
+        <Suspense fallback={<div className="p-8 text-center text-slate-400">Loading…</div>}>
+          <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
@@ -36,7 +39,8 @@ function App() {
             <Route path="/chat" element={<ChatPage />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+          </Routes>
+        </Suspense>
         <Toaster
           position="top-right"
           toastOptions={{

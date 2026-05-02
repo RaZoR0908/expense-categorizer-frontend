@@ -86,7 +86,7 @@ const DashboardPage = () => {
 
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
             <Link to="/upload" className="rounded-2xl border border-white/10 bg-violet-500/10 px-4 py-3 text-sm font-medium text-violet-200 transition hover:bg-violet-500/20">
-              Upload a new statement
+              Upload a new Bank Statement
             </Link>
             <Link to="/chat" className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-200 transition hover:bg-white/10">
               Ask the finance assistant
@@ -131,7 +131,7 @@ const DashboardPage = () => {
 
             {transactions.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-white/10 px-4 py-10 text-center text-sm text-slate-500">
-                No transactions yet. Upload a statement to start populating the dashboard.
+                No transactions yet. Upload a Bank Statement to start populating the dashboard.
               </div>
             ) : null}
           </div>
