@@ -84,6 +84,10 @@ const AppLayout = () => {
           <main className="flex-1 px-4 py-6 lg:px-8 lg:py-8">
             <Outlet />
           </main>
+
+          <footer className="border-t border-white/10 px-4 py-4 text-center text-xs text-slate-500 lg:px-8">
+            © 2026 Finailytics. All rights reserved.
+          </footer>
         </div>
       </div>
     </div>
